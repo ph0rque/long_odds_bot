@@ -1,7 +1,10 @@
 %p You have #{@chips} chips.
+
 - if @chips == 0
   %p Try again later!
 - else
-  -# Do stuff here...
-%p Here is what the cat dragged in:
-= @bet_weeks
+  %p Here is what the events for the next day look like:
+  %p= @events
+
+%p Here is what the bet weeks look like:
+%p= @bet_weeks
