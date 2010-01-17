@@ -21,8 +21,19 @@ get '/' do
     @events = JSON.parse(RestClient.get(events))
 
     #For each game, determine the highest payout; record the points for it.
-#    points = price.abs/100 if price > 0
-#    points = 100/price.abs if price < 0
+    @events.each do |game|
+      over_price  = game['overunder']['over_price']
+      under_price = game['overunder']['under_price']
+      home_price  = game['moneyline']['home_line']
+      away_price  = game['moneyline']['away_line']
+      #we won't deal with   spreads for now...
+
+      @over_payout  = over_price  < 0 ? -100/over_price  : over_price /100
+      @under_payout = under_price < 0 ? -100/under_price : under_price/100
+      @home_payout  = over_price  < 0 ? -100/home_price  : home_price /100
+      @away_payout  = over_price  < 0 ? -100/away_price  : away_price /100
+
+    end
   end
 
   haml :index
