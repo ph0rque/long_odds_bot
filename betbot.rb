@@ -19,18 +19,21 @@ get '/' do
   unless @chips == 0
     #Get all the games in the next 24 hours.
     @events = JSON.parse(RestClient.get(events))
-#    #For each game, determine the highest payout; record the points for it.
+    #For each game, determine the highest payout; record the points for it.
 #    @events.each do |game|
 #      over_price  = game['overunder']['over_price']
 #      under_price = game['overunder']['under_price']
 #      home_price  = game['moneyline']['home_line']
 #      away_price  = game['moneyline']['away_line']
-#      #we won't deal with spreads for now...
+#      home_spread = game['spread']['home_price']
+#      away_spread = game['spread']['away_price']
 
-#      @over_payout  = over_price  < 0 ? -100/over_price  : over_price /100
-#      @under_payout = under_price < 0 ? -100/under_price : under_price/100
-#      @home_payout  = over_price  < 0 ? -100/home_price  : home_price /100
-#      @away_payout  = over_price  < 0 ? -100/away_price  : away_price /100
+#      game[over_payout]  = over_price  < 0 ? -100/over_price  : over_price /100
+#      game[under_payout] = under_price < 0 ? -100/under_price : under_price/100
+#      game[home_payout]  = home_price  < 0 ? -100/home_price  : home_price /100
+#      game[away_payout]  = away_price  < 0 ? -100/away_price  : away_price /100
+#      game[home_spread]  = home_spread < 0 ? -100/home_spread : home_spread/100
+#      game[away_spread]  = away_spread < 0 ? -100/away_spread : away_spread/100
 
 #    end
 #    #Sum all the points and divide by the available chips = chips_per_point.
@@ -51,10 +54,10 @@ get '/game/:event_id/bet_line_type/:type/pick/:pick/wager_amount/:wager/' do
   @pick     = params[:pick] 
   @wager    = params[:wager]
 
-  bet_url = "#{wtt_url}/bets.json"
+  beturl = "#{wtt_url}/bets.json"
 
-  RestClient.post(bet_url, :event_id => @event_id, :bet_line_type => @type, :pick => @pick,
-                           :wager => @wager, :api_key => api_key )
+  RestClient.post(beturl, :event_id => @event_id, :bet_line_type => @type, 
+                          :pick => @pick, :wager => @wager, :api_key => api_key)
 
   haml :bet
 end
