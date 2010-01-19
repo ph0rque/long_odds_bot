@@ -3,8 +3,13 @@
 - if @chips == 0
   %p Try again later!
 - else
-  %p Here is what the events for the next day look like:
-  %p= @events
+  %p here is what we've got:
+  - @events.each do |game|
+    %p #{game['name']}: #{game['max_payout']} for #{game['max_amount']}
 
+%p Here is what the events for the next day look like:
+%p= @events
+
+%br/
 %p Here is what the bet weeks look like:
 %p= @bet_weeks
