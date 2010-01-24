@@ -64,18 +64,18 @@ get '/' do
 
         wager = (@chips_per_point * game['max_amount']).to_i
 
+        bet_line =
+          if game['max_payout'].include?('over' || 'under') then 'overunder'
+          elsif       game['max_payout'].include?('payout') then 'moneyline'
+          elsif       game['max_payout'].include?('spread') then 'spread'
+          else nil; end
+
         while wager > 100
           RestClient.post(beturl, :event_id => game['id'],
                           :bet_line_type => bet_line, :pick => pick,
                           :wager => 100, :api_key => api_key)
           wager -= 100
         end
-
-        bet_line =
-          if game['max_payout'].include?('over' || 'under') then 'overunder'
-          elsif       game['max_payout'].include?('payout') then 'moneyline'
-          elsif       game['max_payout'].include?('spread') then 'spread'
-          else nil; end
 
         RestClient.post(beturl, :event_id => game['id'],
                         :bet_line_type => bet_line, :pick => pick,
