@@ -62,8 +62,14 @@ get '/' do
       unless @chips_per_point * game['max_amount'] < 10
         pick = game['max_payout'].include?('home') ? 1 : 2
 
-        #break this up for amounts larger than 100
         wager = (@chips_per_point * game['max_amount']).to_i
+
+        while wager > 100
+          RestClient.post(beturl, :event_id => game['id'],
+                          :bet_line_type => bet_line, :pick => pick,
+                          :wager => 100, :api_key => api_key)
+          wager -= 100
+        end
 
         bet_line =
           if game['max_payout'].include?('over' || 'under') then 'overunder'
@@ -71,8 +77,9 @@ get '/' do
           elsif       game['max_payout'].include?('spread') then 'spread'
           else nil; end
 
-        RestClient.post(beturl, :event_id => game['id'], :bet_line_type => bet_line, 
-                        :pick => pick, :wager => wager, :api_key => api_key)
+        RestClient.post(beturl, :event_id => game['id'],
+                        :bet_line_type => bet_line, :pick => pick,
+                        :wager => wager, :api_key => api_key)
       end
     end
   end
