@@ -9,18 +9,21 @@ wtt_url   = 'http://localhost:3000/apiv1'
 api_key   = 'b1d8338ee7ad9c257e4b91fbf23777b1d0979788'
 bet_weeks = "#{wtt_url}/bet_weeks.json?api_key=#{api_key}"
 events    = "#{wtt_url}/events.json?api_key=#{api_key}"
+beturl    = "#{wtt_url}/bets.json"
 
 get '/' do
   #Get # of chips for the current betweek.
-  #If none, you're done until the next time you check.
+  #If less than ten, you're done until the next time you check.
   @bet_weeks = JSON.parse(RestClient.get(bet_weeks))
   @chips = @bet_weeks[0]['chips_available']
 
-  unless @chips == 0
+  unless @chips < 10
     #Get all the games in the next 24 hours.
     @events = JSON.parse(RestClient.get(events))
 
     #For each game, determine the max payout; record the points for it.
+    @points = 0
+
     @events.each do |game|
       if game['overunder']
         over_price  = game['overunder']['over_price']  || 0
@@ -47,18 +50,37 @@ get '/' do
 
       game['max_amount'] = game['stats'].values.max
       game['max_payout'] = game['stats'].key(game['max_amount'])
+
+      @points += game['max_amount']
     end
 
     #Sum all the points and divide by the available chips = chips_per_point.
+    @chips_per_point =  @chips / @points
+
     #For each game, bet points*chips_per_point on the highest payout.
+    @events.each do |game|
+      unless @chips_per_point * game['max_amount'] < 10
+        pick = game['max_payout'].include?('home') ? 1 : 2
+
+        #break this up for amounts larger than 100
+        wager = (@chips_per_point * game['max_amount']).to_i
+
+        bet_line =
+          if game['max_payout'].include?('over' || 'under') then 'overunder'
+          elsif       game['max_payout'].include?('payout') then 'moneyline'
+          elsif       game['max_payout'].include?('spread') then 'spread'
+          else nil; end
+
+        RestClient.post(beturl, :event_id => game['id'], :bet_line_type => bet_line, 
+                        :pick => pick, :wager => wager, :api_key => api_key)
+      end
+    end
   end
 
   haml :index
 end
 
-get '/game/:event_id/bet_line_type/:type/pick/:pick/wager_amount/:wager/' do
-  #also need to account for bet_week... take a look at the latest
-  #bet controller after pulling it.
+get '/game/:event_id/bet_line/:type/pick/:pick/wager_amount/:wager/' do
 
   @event_id = params[:event_id]
   #type can be overunder, moneyline, or spread
@@ -66,8 +88,6 @@ get '/game/:event_id/bet_line_type/:type/pick/:pick/wager_amount/:wager/' do
   #team or over/under 
   @pick     = params[:pick] 
   @wager    = params[:wager]
-
-  beturl = "#{wtt_url}/bets.json"
 
   RestClient.post(beturl, :event_id => @event_id, :bet_line_type => @type, 
                           :pick => @pick, :wager => @wager, :api_key => api_key)

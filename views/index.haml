@@ -1,11 +1,14 @@
 %p You have #{@chips} chips available.
+%p There are a total of #{@points} points,
+%p so you can bet #{@chips_per_point} chips per point.
 
-- if @chips == 0
+- if @chips < 10
   %p Try again later!
 - else
   %p here is what we've got:
   - @events.each do |game|
-    %p #{game['name']}: #{game['max_payout']} for #{game['max_amount']}
+    - unless game['max_amount'] == 0
+      %p #{game['name']}: #{game['max_payout']} for #{game['max_amount']}
 
 %p Here is what the events for the next day look like:
 %p= @events
