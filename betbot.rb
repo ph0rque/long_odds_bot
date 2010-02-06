@@ -71,10 +71,12 @@ get '/' do
           else nil; end
 
         while wager > 100
+          wager_bet = wager < 110 ? 90 : 100
+
           RestClient.post(beturl, :event_id => game['id'],
                           :bet_line_type => bet_line, :pick => pick,
-                          :wager => 100, :api_key => api_key)
-          wager -= 100
+                          :wager => wager_bet, :api_key => api_key)
+          wager -= wager_bet
         end
 
         RestClient.post(beturl, :event_id => game['id'],
