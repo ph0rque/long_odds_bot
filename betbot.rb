@@ -14,12 +14,12 @@ beturl    = "#{wtt_url}/bets.json"
 get '/' do
   #Get # of chips for the current betweek.
   #If less than ten, you're done until the next time you check.
-  @bet_weeks = JSON.parse(RestClient.get(bet_weeks))
+  @bet_weeks = JSON.parse(get_with_status(bet_weeks))
   @chips = @bet_weeks[0]['chips_available']
 
   unless @chips < 10
     #Get all the games in the next 24 hours.
-    @events = JSON.parse(RestClient.get(events))
+    @events = JSON.parse(get_with_status(events))
 
     #For each game, determine the max payout; record the points for it.
     @points = 0
@@ -65,18 +65,20 @@ get '/' do
         wager = (@chips_per_point * game['max_amount']).to_i
 
         bet_line =
-          if game['max_payout'].include?('over' || 'under') then 'overunder'
-          elsif       game['max_payout'].include?('payout') then 'moneyline'
-          elsif       game['max_payout'].include?('spread') then 'spread'
+          if    game['max_payout'].include?('over' || 'under') then 'overunder'
+          elsif game['max_payout'].include?('payout')          then 'moneyline'
+          elsif game['max_payout'].include?('spread')          then 'spread'
           else nil; end
 
         while wager > 100
-          wager_bet = wager < 110 ? 90 : 100
+          #take care of the corner case of e.g. 109: 
+          #won't be able to bet 9 leftover chips
+          wager_fraction = wager < 110 ? 90 : 100
 
           RestClient.post(beturl, :event_id => game['id'],
                           :bet_line_type => bet_line, :pick => pick,
-                          :wager => wager_bet, :api_key => api_key)
-          wager -= wager_bet
+                          :wager => wager_fraction, :api_key => api_key)
+          wager -= wager_fraction
         end
 
         RestClient.post(beturl, :event_id => game['id'],
@@ -102,4 +104,16 @@ get '/game/:event_id/bet_line/:type/pick/:pick/wager_amount/:wager/' do
                           :pick => @pick, :wager => @wager, :api_key => api_key)
 
   haml :bet
+end
+
+def get_with_status(url)
+  RestClient.get(url) do |response|
+    if response.code == 200
+      "It worked!"
+      response
+    else
+      "Something's not quite right: code #{response.code}."
+      response.return!
+    end
+  end
 end
