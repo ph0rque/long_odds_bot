@@ -90,21 +90,6 @@ get '/' do
   haml :index
 end
 
-get '/game/:event_id/bet_line/:type/pick/:pick/wager_amount/:wager/' do
-
-  @event_id = params[:event_id]
-  #type can be overunder, moneyline, or spread
-  @type     = params[:type]
-  #team or over/under 
-  @pick     = params[:pick] 
-  @wager    = params[:wager]
-
-  RestClient.post(beturl, :event_id => @event_id, :bet_line_type => @type, 
-                          :pick => @pick, :wager => @wager, :api_key => api_key)
-
-  haml :bet
-end
-
 def get_with_status(url)
   RestClient.get(url) do |response|
     if response.code == 200
