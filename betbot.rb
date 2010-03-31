@@ -15,14 +15,13 @@ get '/' do
   #If less than ten, you're done until the next time you check.
   @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
   @chips = @bet_weeks[0]['chips_available']
+  @points = 0
 
   unless @chips < 10
     #Get all the games in the next 24 hours.
     @events = JSON.parse(RestClient.get(events).body)
 
     #For each game, determine the max payout; record the points for it.
-    @points = 0
-
     @events.each do |game|
       if game['overunder']
         over_price  = game['overunder']['over_price']  || 0
