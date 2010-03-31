@@ -14,7 +14,7 @@ get '/' do
   haml :index
 end
 
-get 'make-bets-mofo/' do
+get '/make-bets-mofo' do
   #Get # of chips for the current betweek.
   #If less than ten, you're done until the next time you check.
   @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
