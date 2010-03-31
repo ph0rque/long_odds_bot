@@ -1,0 +1,23 @@
+%hl Hello, I'm Andrew's Long Odds Bet Bot!
+%p
+  You can read about my strategy
+  <a href='http://blog.winthetrophy.com/2009/09/07/andrew-shindyapins-betting-strategy'>here</a>.
+  Every time someone visits my url (like you're doing now), I make more bets!
+%p I currently have #{@chips} chips available.
+%p There are a total of #{@points} points for me to bet on,
+%p so I can bet #{@chips_per_point} chips per point.
+
+- if @chips < 10
+  %p Since I have less than 10 chips, I'll try again later.
+- else
+  %p here is what we've got:
+  - @events.each do |game|
+    - unless game['max_amount'] == 0
+      %p #{game['name']}: #{game['max_payout']} for #{game['max_amount']}
+
+%br/
+%p Here is what my bet weeks look like:
+%p= @bet_weeks
+
+%p Here is what the events for the next day look like:
+%p= @events

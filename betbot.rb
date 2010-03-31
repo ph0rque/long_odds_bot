@@ -11,6 +11,10 @@ events    = "#{wtt_url}/events.json?api_key=#{api_key}"
 beturl    = "#{wtt_url}/bets"
 
 get '/' do
+  haml :index
+end
+
+get 'make-bets-mofo/' do
   #Get # of chips for the current betweek.
   #If less than ten, you're done until the next time you check.
   @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
@@ -86,5 +90,5 @@ get '/' do
     end
   end
 
-  haml :index
+  haml :bets
 end
