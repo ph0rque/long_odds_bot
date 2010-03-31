@@ -1,4 +1,4 @@
 sinatra
 json
-rest_client
+rest-client
 haml
