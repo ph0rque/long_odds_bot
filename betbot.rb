@@ -13,12 +13,12 @@ beturl    = "#{wtt_url}/bets"
 get '/' do
   #Get # of chips for the current betweek.
   #If less than ten, you're done until the next time you check.
-  @bet_weeks = JSON.parse(get_with_status(bet_weeks))
+  @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
   @chips = @bet_weeks[0]['chips_available']
 
   unless @chips < 10
     #Get all the games in the next 24 hours.
-    @events = JSON.parse(get_with_status(events))
+    @events = JSON.parse(RestClient.get(events).body)
 
     #For each game, determine the max payout; record the points for it.
     @points = 0
@@ -88,16 +88,4 @@ get '/' do
   end
 
   haml :index
-end
-
-def get_with_status(url)
-  RestClient.get(url) do |response|
-    if response.code == 200
-      "It worked!"
-      response
-    else
-      "Something's not quite right: code #{response.code}."
-      response.return!
-    end
-  end
 end
