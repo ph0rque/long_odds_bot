@@ -19,7 +19,7 @@ get '/make-bets-mofo' do
   #If less than ten, you're done until the next time you check.
   @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
   @chips = @bet_weeks[0]['chips_available']
-  @points = 0
+  @points = @chips_per_point = 0
 
   unless @chips < 10
     #Get all the games in the next 24 hours.
