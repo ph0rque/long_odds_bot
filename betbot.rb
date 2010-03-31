@@ -4,12 +4,11 @@ require 'json'
 require 'rest_client'
 require 'haml'
 
-#change the following to http://www.winthetrophy.com/apiv1 when available
-wtt_url   = 'http://localhost:3000/apiv1'
-api_key   = 'b1d8338ee7ad9c257e4b91fbf23777b1d0979788'
+wtt_url   = 'http://www.winthetrophy.com/apiv1'
+api_key   = 'e66cdcc1f1fa5f5515ffc8a336bcf397858c8422'
 bet_weeks = "#{wtt_url}/bet_weeks.json?api_key=#{api_key}"
 events    = "#{wtt_url}/events.json?api_key=#{api_key}"
-beturl    = "#{wtt_url}/bets.json"
+beturl    = "#{wtt_url}/bets"
 
 get '/' do
   #Get # of chips for the current betweek.
