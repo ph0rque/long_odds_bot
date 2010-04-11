@@ -5,7 +5,7 @@ require 'rest_client'
 require 'haml'
 
 wtt_url   = 'http://www.winthetrophy.com/apiv1'
-api_key   = 'e66cdcc1f1fa5f5515ffc8a336bcf397858c8422'
+api_key   = 'db0c1d6fa800e91936e839486420ba2f44206e27'
 bet_weeks = "#{wtt_url}/bet_weeks.json?api_key=#{api_key}"
 events    = "#{wtt_url}/events.json?api_key=#{api_key}"
 beturl    = "#{wtt_url}/bets"
