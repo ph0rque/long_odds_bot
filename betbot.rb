@@ -9,10 +9,10 @@ api_key   = 'db0c1d6fa800e91936e839486420ba2f44206e27'
 bet_weeks = "#{wtt_url}/bet_weeks.json?api_key=#{api_key}"
 events    = "#{wtt_url}/events.json?api_key=#{api_key}"
 beturl    = "#{wtt_url}/bets"
-status    = 'ok'
+status    = 'ok' #should be ok unless something is broken
 
 get '/' do
-  if status = 'ok'
+  if status == 'ok'
 
     #Get # of chips for the current betweek.
     #If less than ten, you're done until the next time you check.
