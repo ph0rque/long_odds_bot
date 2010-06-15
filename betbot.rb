@@ -3,26 +3,20 @@ require 'sinatra'
 require 'json'
 require 'rest_client'
 require 'haml'
-
-wtt_url   = 'http://www.winthetrophy.com/apiv1'
-api_key   = 'db0c1d6fa800e91936e839486420ba2f44206e27'
-bet_weeks = "#{wtt_url}/bet_weeks.json?api_key=#{api_key}"
-events    = "#{wtt_url}/events.json?api_key=#{api_key}"
-beturl    = "#{wtt_url}/bets"
-status    = 'ok' #should be ok unless something is broken
+require 'betbot_config'
 
 get '/' do
-  if status == 'ok'
+  if STATUS == 'ok'
 
     #Get # of chips for the current betweek.
     #If less than ten, you're done until the next time you check.
-    @bet_weeks = JSON.parse(RestClient.get(bet_weeks).body)
+    @bet_weeks = JSON.parse(RestClient.get(BET_WEEKS).body)
     @chips = @bet_weeks[0]['chips_available']
     @points = @chips_per_point = 0
 
     unless @chips < 10
       #Get all the games in the next 24 hours.
-      @events = JSON.parse(RestClient.get(events).body)
+      @events = JSON.parse(RestClient.get(EVENTS).body)
 
       #For each game, determine the max payout; record the points for it.
       @events.each do |game|
@@ -76,15 +70,15 @@ get '/' do
             #won't be able to bet 9 leftover chips
             wager_fraction = wager < 110 ? 90 : 100
 
-            RestClient.post(beturl, :event_id => game['id'],
+            RestClient.post(BET_URL, :event_id => game['id'],
                             :bet_line_type => bet_line, :pick => pick,
-                            :wager => wager_fraction, :api_key => api_key)
+                            :wager => wager_fraction, :api_key => API_KEY)
             wager -= wager_fraction
           end
 
-          RestClient.post(beturl, :event_id => game['id'],
+          RestClient.post(BET_URL, :event_id => game['id'],
                           :bet_line_type => bet_line, :pick => pick,
-                          :wager => wager, :api_key => api_key)
+                          :wager => wager, :api_key => API_KEY)
         end
       end
     end
