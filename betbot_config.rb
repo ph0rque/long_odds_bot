@@ -1,4 +1,4 @@
-WTT_URL   = 'http://localhost:3000/apiv1' #'http://www.winthetrophy.com/apiv1'
+WTT_URL   = 'http://www.winthetrophy.com/apiv1'
 
 # Put your API Key in a file called ./api.key
 API_KEY = File.read(File.join(File.dirname(__FILE__), 'api.key'))
