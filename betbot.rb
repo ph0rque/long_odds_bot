@@ -7,7 +7,12 @@ require 'rufus/scheduler'
 
 get '/' do
   if STATUS == 'ok'
-    haml :bets
+    @bet_weeks       = JSON.parse(RestClient.get(BET_WEEKS).body)
+    @chips           = @bet_weeks[0]['chips']
+    @chips_available = @bet_weeks[0]['chips_available']
+    @events          = JSON.parse(RestClient.get(EVENTS).body)
+
+    haml :hello
   else
     haml :borken    
   end
@@ -22,7 +27,7 @@ get '/make-bets-mofo' do
   end
 end
 
-# Do I also want '/bet_weeks', '/events', and '/bets', or just use the WTT UI?
+# Do I also want the '/bets' view, or just use the WTT UI?
 
 #Scheduled bets run at 3am UTC
 scheduler = Rufus::Scheduler.start_new
