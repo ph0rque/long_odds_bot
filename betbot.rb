@@ -7,10 +7,10 @@ require 'rufus/scheduler'
 
 get '/' do
   if STATUS == 'ok'
-    @bet_weeks       = JSON.parse(RestClient.get(BET_WEEKS).body)
-    @chips           = @bet_weeks[0]['chips']
-    @chips_available = @bet_weeks[0]['chips_available']
-    @events          = JSON.parse(RestClient.get(EVENTS).body)
+    @current_bet_week = JSON.parse(RestClient.get(CURRENT_BET_WEEK).body)
+    @chips            = @current_bet_week[0]['chips']
+    @chips_available  = @current_bet_week[0]['chips_available']
+    @events           = JSON.parse(RestClient.get(EVENTS).body)
 
     haml :hello
   else
@@ -31,6 +31,7 @@ end
 
 #Scheduled bets run at 3am UTC
 scheduler = Rufus::Scheduler.start_new
+
 scheduler.every '1d', :first_at => '2010/06/18 3:00 UTC' do
   bet_on_games
 end
