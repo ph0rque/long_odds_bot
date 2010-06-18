@@ -12,3 +12,5 @@ get '/' do
     haml :borken    
   end
 end
+
+# Do I also want '/bet_weeks', '/events', and '/bets', or just use the WTT UI?
