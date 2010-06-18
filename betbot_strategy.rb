@@ -4,11 +4,11 @@ require 'rest_client'
 def bet_on_games
   #Get # of chips for the current betweek.
   #If less than ten, you're done until the next time you check.
-  @bet_weeks = JSON.parse(RestClient.get(BET_WEEKS).body)
-  @chips = @bet_weeks[0]['chips_available']
-  @points = @chips_per_point = 0
+  @bet_weeks       = JSON.parse(RestClient.get(BET_WEEKS).body)
+  @chips_available = @bet_weeks[0]['chips_available']
+  @points          = @chips_per_point = 0
 
-  unless @chips < 10
+  unless @chips_available < 10
     #Get all the games in the next 24 hours.
     @events = JSON.parse(RestClient.get(EVENTS).body)
 
@@ -46,7 +46,7 @@ def bet_on_games
     #no events were available, so we don't have anything to bet
     unless @points == 0
       #Sum all the points and divide by the available chips = chips_per_point.
-      @chips_per_point =  @chips / @points
+      @chips_per_point =  @chips_available / @points
 
       #For each game, bet the amount of points determined, if any
       @events.each do |game|

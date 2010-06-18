@@ -1,0 +1,12 @@
+%h2 'tsup dude
+
+- if @chips_available < 10
+  %p Since I have less than 10 chips available, I'll try again later.
+- else
+  %p There are a total of #{@points} points for me to bet on, so I can bet #{@chips_per_point} chips per point.
+  %hr/
+  %p Here is what I've just bet on:
+  - @events.each do |game|
+    - unless game['max_amount'] == 0
+      %p #{game['name']}: #{game['max_payout']} for #{game['max_amount']}
+
