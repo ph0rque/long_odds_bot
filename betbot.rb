@@ -31,6 +31,6 @@ end
 
 #Scheduled bets run at 3am UTC
 scheduler = Rufus::Scheduler.start_new
-scheduler.every '1d', :first_at => '2010/06/18 21:12 UTC' do
+scheduler.every '1d', :first_at => '2010/06/18 21:14 UTC' do
   bet_on_games
 end
