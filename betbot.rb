@@ -19,6 +19,7 @@ get '/make-bets-mofo' do
     haml :bets
   else
     haml :hal
+  end
 end
 
 # Do I also want '/bet_weeks', '/events', and '/bets', or just use the WTT UI?
