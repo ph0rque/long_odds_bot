@@ -7,11 +7,18 @@ require 'rufus/scheduler'
 
 get '/' do
   if STATUS == 'ok'
-    bet_on_games
     haml :bets
   else
     haml :borken    
   end
+end
+
+get '/make-bets-mofo' do
+  if params[:api_key] == API_KEY
+    bet_on_games
+    haml :bets
+  else
+    haml :hal
 end
 
 # Do I also want '/bet_weeks', '/events', and '/bets', or just use the WTT UI?
