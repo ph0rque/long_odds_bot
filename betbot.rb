@@ -29,9 +29,9 @@ end
 
 # Do I also want the '/bets' view, or just use the WTT UI?
 
-#Scheduled bets run at 3am UTC
+#Scheduled bets run at 2pm Eastern
 scheduler = Rufus::Scheduler.start_new
 
-scheduler.every '1d', :first_at => '2010/06/18 3:00 UTC' do
+scheduler.every '1d', :first_at => '2010/06/19 19:00 UTC' do
   bet_on_games
 end
