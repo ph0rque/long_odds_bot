@@ -32,6 +32,7 @@ end
 #Scheduled bets run at 2pm Eastern
 scheduler = Rufus::Scheduler.start_new
 
-scheduler.every '1d', :first_at => '2010/06/19 19:00 UTC' do
+scheduler.every '1d', :first_at => '2010/06/19 19:00 UTC' do |job|
   bet_on_games
+  puts "Bet on games at #{Time.now}; this is job number#{job.job_id}."
 end
