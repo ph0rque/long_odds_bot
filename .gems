@@ -2,4 +2,3 @@ sinatra
 json
 rest-client
 haml
-rufus-scheduler

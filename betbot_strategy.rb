@@ -57,7 +57,7 @@ def bet_on_games
           wager = (@chips_per_point * game['max_amount']).to_i
 
           bet_line =
-            if    game['max_payout'].include?('over' || 'under') then 'overunder'
+            if    game['max_payout'].include?('over' || 'under') then 'over_under'
             elsif game['max_payout'].include?('payout')          then 'moneyline'
             elsif game['max_payout'].include?('spread')          then 'spread'
             else nil; end
