@@ -6,9 +6,11 @@ def bet_on_games
   #If less than ten, you're done until the next time you check.
   @current_bet_week = JSON.parse(RestClient.get(CURRENT_BET_WEEK).body)
   @chips_available  = @current_bet_week[0]['chips_available']
-  @points           = @chips_per_point = 0
-
-  unless @chips_available < 10
+  @points           = 0
+  @chips_per_point  = 0
+  @chips            = @current_bet_week[0]['chips']
+  
+  unless @chips_available < 10 or @chips > THRESHOLD
     #Get all the games in the next 24 hours.
     @events = JSON.parse(RestClient.get(EVENTS).body)
 

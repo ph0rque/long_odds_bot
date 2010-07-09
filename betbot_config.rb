@@ -9,4 +9,5 @@ CURRENT_BET_WEEK = "#{WTT_URL}/bet_weeks.json?time=#{Time.now.to_i}&api_key=#{AP
 EVENTS           = "#{WTT_URL}/events.json?api_key=#{API_KEY}"
 BET_URL          = "#{WTT_URL}/bets"
 STATUS           = 'ok' # should be ok unless something is broken
+THRESHOLD        = 2500 # quit while you're ahead (over this threshold)
 
