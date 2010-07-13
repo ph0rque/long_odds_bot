@@ -1,4 +1,4 @@
-require '../../betbot_strategy'
+require 'betbot_strategy'
 
 task :cron => :environment do
   puts 'Making daily bets...'

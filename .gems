@@ -1,3 +1,4 @@
+rake
 sinatra
 json
 rest-client
