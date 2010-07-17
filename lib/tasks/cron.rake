@@ -1,3 +1,4 @@
+require 'betbot_config'
 require 'betbot_strategy'
 
 task :cron => :environment do
